@@ -1,4 +1,4 @@
-import { getContacts, getContactById,postContact } from "../services/contacts-service.js";
+import { getContacts, getContactById,postContact,deleteContact, upsetContact } from "../services/contacts-service.js";
 import createHttpError from "http-errors";
 
 export const getContactsController = async (req,res) =>{
@@ -35,15 +35,37 @@ export const getContactsByIdController = async (req,res,next)=>{
             });
         }
         next(error);
-    }};
+}};
 
-
-export const getPostContactController = async (req,res) => {
-    const contact = await postContact(req.body);
+export const postContactController = async (req,res) => {
+    const data = await postContact(req.body);
 
     res.status(201).json({
-        data:contact,
-        message:"created!",
+        status:201,
+        data,
+        message:"Successfully created a contact!!",
     });
-
 };
+
+export const deleteContactController = async (req,res,next) => {
+    const {id} = req.params;
+    const contact = await deleteContact(id);
+
+    if(!contact){return next(createHttpError(404, 'Student not found'));}
+
+    res.status(204).json({
+        status:204,
+        message:"No content",
+    });
+};
+
+export const upsetContactController = async (req, res) => {
+    const { id } = req.params;
+    const data = await upsetContact({_id:id},req.body,{upsert:true});
+
+    res.json({
+        status:201,
+        data,
+        message:"Update success"
+    });
+  };

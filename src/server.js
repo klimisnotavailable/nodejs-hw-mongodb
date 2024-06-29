@@ -1,15 +1,15 @@
 import express from 'express';
 import pino from "pino-http";
 import cors from "cors";
+import env from "./utils/env.js";
 
 const app = express();
 
-const PORT = 3000;
+const PORT = env("PORT");
 
 import contactsRouter from './routers/contacts.js';
 import notFoundHandler from './middlewares/notFoundHandler.js';
 import errorHandler from './middlewares/errorHandler.js';
-import { getPostContactController } from './controllers/contact-controller.js';
 
 export const setUpServer = () =>{
     app.use(
@@ -21,10 +21,9 @@ export const setUpServer = () =>{
     );
 
     app.use(cors());
+    app.use(express.json());
 
     app.use("/contacts", contactsRouter);
-
-    // app.post("/contacts", getPostContactController);
 
     app.use(notFoundHandler);
     app.use(errorHandler);
