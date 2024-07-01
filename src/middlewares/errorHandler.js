@@ -1,10 +1,10 @@
 const errorHandler = (error,req,res,next) =>{
-    const {status} = error;
+    const {status,message} = error;
 
     res.status(status).json({
         status,
         message:'Something went wrong',
-        data:error.message,
+        data:message,
     });
 };
 

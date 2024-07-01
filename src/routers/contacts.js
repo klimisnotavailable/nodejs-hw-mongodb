@@ -10,8 +10,8 @@ contactsRouter.get("/:id", ctrlWrapper(getContactsByIdController));
 
 contactsRouter.post("/", ctrlWrapper(postContactController));
 
-contactsRouter.delete("/:id",ctrlWrapper(deleteContactController));
+contactsRouter.delete("/:id", ctrlWrapper(deleteContactController));
 
-contactsRouter.put("/:id",ctrlWrapper(upsetContactController));
+contactsRouter.patch("/:id", ctrlWrapper(upsetContactController));
 
 export default contactsRouter;

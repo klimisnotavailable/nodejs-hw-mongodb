@@ -6,9 +6,9 @@ export const getContactById = id => Contact.findById(id);
 
 export const postContact = data => Contact.create(data);
 
-export const deleteContact = id => Contact.findOneAndDelete(id);
+export const deleteContact = id => Contact.findByIdAndDelete(id);
 
-export const upsetContact = (filter,payload,options={}) => Contact.findOneAndUpdate(filter,payload,{
+export const upsetContact = (filter,payload,options={}) => Contact.findByIdAndUpdate(filter,payload,{
     new:true,
     ...options
 });
