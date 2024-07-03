@@ -13,14 +13,12 @@ export const upsetContact = async (filter,payload,options={}) => {
     new:true,
     ...options});
 
-if (!result || !result.value) return null;
+if (!result) return null;
 
 // const isNew = data && data.lastErrorObject && data.lastErrorObject.upserted;
-const isNew = Boolean(result?.lastErrorObject?.upserted);
 
 return {
-    data: result.value,
-    isNew,
+    data: result,
 };
 
 };
