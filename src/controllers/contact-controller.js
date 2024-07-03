@@ -63,7 +63,7 @@ export const upsetContactController = async (req, res) => {
     const { id } = req.params;
     const data = await upsetContact({_id:id},req.body);
 
-    if(!data){return createHttpError(404, 'Contact not found');}
+    if(!data){throw createHttpError(404, 'Contact not found');}
 
     res.json({
         status:200,

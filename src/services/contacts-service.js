@@ -24,3 +24,5 @@ return {
 };
 
 };
+
+// export const upsetContact = async (filter,payload,options={}) => Contact.findOneAndUpdate(filter,payload,{new:true,...options});
