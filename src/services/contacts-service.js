@@ -8,13 +8,11 @@ export const postContact = data => Contact.create(data);
 
 export const deleteContact = id => Contact.findByIdAndDelete(id);
 
-export const upsetContact =  (filter,payload,options={}) => {
+export const upsetContact = async (filter,payload,options={}) => {
 
-    const result = Contact.findOneAndUpdate(filter,payload,{
+    const result = await Contact.findOneAndUpdate(filter,payload,{
     new:true,
     ...options});
-    console.log("before operation");
-
 
     if (!result) return null;
 
