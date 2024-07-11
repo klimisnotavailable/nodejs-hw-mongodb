@@ -10,6 +10,7 @@ const PORT = env("PORT");
 import contactsRouter from './routers/contacts.js';
 import notFoundHandler from './middlewares/notFoundHandler.js';
 import errorHandler from './middlewares/errorHandler.js';
+import authRouter from './routers/auth.js';
 
 export const setUpServer = () =>{
     app.use(
@@ -24,6 +25,8 @@ export const setUpServer = () =>{
     app.use(express.json());
 
     app.use("/contacts", contactsRouter);
+    app.use("/auth", authRouter);
+
 
     app.use(notFoundHandler);
     app.use(errorHandler);
