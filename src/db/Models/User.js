@@ -8,14 +8,10 @@ const User = new Schema({
   { timestamps: true, versionKey: false },
 );
 
+User.methods.toJSON = function () {
+  const obj = this.toObject();
+  delete obj.password;
+  return obj;
+};
+
 export const usersCollection = model("users",User);
-
-const Session = new Schema({
-  userId:{type:String,required:true},
-  accessId:{type:String,required:true},
-  refreshToken:{type:String,required:true},
-  accessTokenValidUntil:{type:Date,required:true},
-  refreshTokenValidUntil:{type:Date,required:true},
-});
-
-export const sessionsCollection = model('sessions',Session);

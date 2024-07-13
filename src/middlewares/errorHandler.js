@@ -1,4 +1,5 @@
 const errorHandler = (error,req,res,next) =>{
+    console.log(error);
     const {status,message} = error;
 
     res.status(status).json({
