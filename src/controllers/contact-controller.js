@@ -3,12 +3,23 @@ import createHttpError from "http-errors";
 import { parsePaginationParams } from "../utils/parsePaginationParams.js";
 import { parseSortParams } from "../utils/parseSortParams.js";
 import { contactFieldList } from "../constants/contactsFieldList.js";
+import parseContactFitlerParams from "../utils/parseContactFilterParams.js";
 
 
 export const getContactsController = async (req,res) =>{
+    const { _id: userId } = req.user;
+    const {query} = req;
     const {page,perPage} = parsePaginationParams(req.query);
     const {sortBy,sortOrder} = parseSortParams(req.query,contactFieldList);
-    const data = await getContacts(page,perPage,sortBy,sortOrder);
+    const filter = {...parseContactFitlerParams(query),userId};
+
+    const data = await getContacts(
+        page,
+        perPage,
+        sortBy,
+        sortOrder,
+        filter,
+    );
 
     res.status(200).json({
         status:200,
@@ -44,6 +55,7 @@ export const getContactsByIdController = async (req,res,next)=>{
 }};
 
 export const postContactController = async (req,res) => {
+    req.body.userId = req.user._id;
     const data = await postContact(req.body);
 
     res.status(201).json({

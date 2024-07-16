@@ -1,11 +1,20 @@
 import createHttpError from 'http-errors';
 import Contact from '../db/Models/Contact.js';
 
-export const getContacts = async (page,perPage,sortBy = "_id",sortOrder="asc") => {
+export const getContacts = async (filter,page,perPage,sortBy = "_id",sortOrder="asc") => {
     const skip = (page - 1) * perPage;
+
+    const dataBaseQuery = Contact.find();
+
+    if(filter.userId){
+        dataBaseQuery.where("userId").equals(filter.userId);
+    };
+
+
     const totalItems = await Contact.countDocuments();
     const totalPages = Math.ceil(totalItems/perPage);
-    const items = await Contact.find().skip(skip).limit(perPage).sort({[sortBy]:sortOrder});
+    const items = await dataBaseQuery.skip(skip).limit(perPage).sort({[sortBy]:sortOrder});
+
     const hasNextPage = page!==totalPages;
     const hasPrevPage = page !== 1;
 
@@ -21,6 +30,7 @@ export const getContacts = async (page,perPage,sortBy = "_id",sortOrder="asc") =
 };
 
 export const getContactById = id => Contact.findById(id);
+// findById(id);
 
 export const postContact = data => Contact.create(data);
 
