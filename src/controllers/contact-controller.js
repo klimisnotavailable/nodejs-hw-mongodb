@@ -1,4 +1,4 @@
-import { getContacts, getContactById,postContact,deleteContact, upsetContact } from "../services/contacts-service.js";
+import { getAllContacts, getContact, postContact, deleteContact, upsetContact } from "../services/contacts-service.js";
 import createHttpError from "http-errors";
 import { parsePaginationParams } from "../utils/parsePaginationParams.js";
 import { parseSortParams } from "../utils/parseSortParams.js";
@@ -13,7 +13,7 @@ export const getContactsController = async (req,res) =>{
     const {sortBy,sortOrder} = parseSortParams(req.query,contactFieldList);
     const filter = {...parseContactFitlerParams(query),userId};
 
-    const data = await getContacts(
+    const data = await getAllContacts(
         page,
         perPage,
         sortBy,
@@ -30,11 +30,12 @@ export const getContactsController = async (req,res) =>{
 export const getContactsByIdController = async (req,res,next)=>{
     try {
         const {id} = req.params;
+        const { _id: userId } = req.user;
 
-        const data = await getContactById(id);
+        const data = await getContact({id, userId});
 
         if(!data){
-            throw createHttpError(404,`Movie with id=${id} not found`);
+            throw createHttpError(404,`Contact with id=${id} not found`);
         }
 
         res.json({
@@ -67,7 +68,8 @@ export const postContactController = async (req,res) => {
 
 export const deleteContactController = async (req,res,next) => {
     const {id} = req.params;
-    const contact = await deleteContact(id);
+    const { _id: userId } = req.user;
+    const contact = await deleteContact({_id:id, userId});
 
     if(!contact){return next(createHttpError(404, 'Contact not found'));}
 
@@ -79,8 +81,9 @@ export const deleteContactController = async (req,res,next) => {
 
 export const upsetContactController = async (req, res, next) => {
     const {id} = req.params;
+    const { _id: userId } = req.user;
     const body = req.body;
-    const data = await upsetContact({_id:id},body);
+    const data = await upsetContact({_id:id,userId},body);
 
     if(!data){throw next(createHttpError(404,"Contact not found"));};
 
@@ -89,4 +92,4 @@ export const upsetContactController = async (req, res, next) => {
         data,
         message:"Sucsessfuly update a contact"
     });
-  };
+};

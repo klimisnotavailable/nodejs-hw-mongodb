@@ -1,15 +1,15 @@
 import createHttpError from 'http-errors';
 import Contact from '../db/Models/Contact.js';
 
-export const getContacts = async (filter,page,perPage,sortBy = "_id",sortOrder="asc") => {
+export const getAllContacts = async (page,perPage,sortBy = "_id",sortOrder="asc",filter) => {
     const skip = (page - 1) * perPage;
 
     const dataBaseQuery = Contact.find();
 
+
     if(filter.userId){
         dataBaseQuery.where("userId").equals(filter.userId);
     };
-
 
     const totalItems = await Contact.countDocuments();
     const totalPages = Math.ceil(totalItems/perPage);
@@ -29,12 +29,13 @@ export const getContacts = async (filter,page,perPage,sortBy = "_id",sortOrder="
     };
 };
 
-export const getContactById = id => Contact.findById(id);
-// findById(id);
+export const getContact = filter => Contact.findOne(filter);
 
 export const postContact = data => Contact.create(data);
 
-export const deleteContact = id => Contact.findByIdAndDelete(id);
+export const deleteContact = filter => {
+    return Contact.findByIdAndDelete(filter);
+};
 
 export const upsetContact = async (filter,payload,options={}) => {
     const response = await Contact.findOneAndUpdate(filter,payload,{new:true,runValidators:true, ...options});
