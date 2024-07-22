@@ -14,13 +14,13 @@ import errorHandler from './middlewares/errorHandler.js';
 import authRouter from './routers/auth.js';
 
 export const setUpServer = () =>{
-    app.use(
-        pino({
-          transport: {
-            target: 'pino-pretty',
-          },
-        }),
-    );
+    // app.use(
+    //     pino({
+    //       transport: {
+    //         target: 'pino-pretty',
+    //       },
+    //     }),
+    // );
 
     app.use(cookieParser());
     app.use(cors());
