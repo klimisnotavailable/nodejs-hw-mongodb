@@ -28,7 +28,10 @@ const contactSchema = new Schema({
         default:"personal",
         requried:true,
     },
-
+    photo:{
+        type:String,
+        requried:false
+    }
 },{
     timestamps:true,
     versionKey:false,

@@ -3,6 +3,7 @@ import pino from "pino-http";
 import cors from "cors";
 import env from "./utils/env.js";
 import cookieParser from 'cookie-parser';
+import { TEMP_UPLOAD_DIR } from './constants/index.js';
 
 const app = express();
 
@@ -21,7 +22,7 @@ export const setUpServer = () =>{
     //       },
     //     }),
     // );
-
+    console.log(TEMP_UPLOAD_DIR);
     app.use(cookieParser());
     app.use(cors());
     app.use(express.json());

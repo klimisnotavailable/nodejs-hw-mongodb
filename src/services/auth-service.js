@@ -4,6 +4,16 @@ import { randomBytes } from 'crypto';
 import createHttpError from "http-errors";
 import { sessionsCollection } from "../db/Models/Session.js";
 import { FIFTEEN_MINUTES, ONE_DAY } from '../constants/index.js';
+import jwt from "jsonwebtoken";
+import { TEMPLATES_DIR } from '../constants/index.js';
+import fs from "node:fs/promises";
+import handlebars from 'handlebars';
+import env from '../utils/env.js';
+
+import { sendMail } from '../utils/sendMail.js';
+const appDomain = env("APP_DOMAIN");
+const JWT_SECRET = env("JWT_SECRET");
+
 
 export const findUser = filter => usersCollection.findOne(filter);
 
@@ -91,4 +101,57 @@ export const requestResetToken = async (email) => {
   if (!user) {
     throw createHttpError(404, 'User not found');
   };
+
+  const payload = {
+    id:user._id,
+    email
+  };
+
+  const token = jwt.sign(payload,JWT_SECRET,{expiresIn:'15m'});
+
+  const emailTemplateSource = await fs.readFile(TEMPLATES_DIR, "utf-8");
+  const emailTemplate = handlebars.compile(emailTemplateSource);
+  const emailHTML = emailTemplate({
+    project_name:'MY CONTACTS',
+    appDomain:appDomain,
+    token
+  });
+
+  const verifyEmail = {
+    from:env("SMTP_FROM"),
+    subject:"reset password",
+    to: email,
+    html:emailHTML
+  };
+
+  await sendMail(verifyEmail);
+};
+
+export const resetPassword = async (payload) => {
+  let entries;
+
+  try {
+    entries = jwt.verify(payload.token, env('JWT_SECRET'));
+  } catch (err) {
+    if (err instanceof Error) throw createHttpError(401, err.message);
+    throw err;
+  }
+
+  const user = await usersCollection.findOne({
+    email: entries.email,
+    _id: entries.id,
+  });
+
+  if (!user) {
+    throw createHttpError(404, 'User not found');
+  }
+
+  const encryptedPassword = await bcrypt.hash(payload.password, 10);
+
+  await usersCollection.updateOne(
+    { _id: user._id },
+    { password: encryptedPassword },
+  );
+
+  sessionsCollection.findOneAndDelete({userId:user._id});
 };

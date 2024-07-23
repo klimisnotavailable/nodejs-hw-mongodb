@@ -4,6 +4,7 @@ import { parsePaginationParams } from "../utils/parsePaginationParams.js";
 import { parseSortParams } from "../utils/parseSortParams.js";
 import { contactFieldList } from "../constants/contactsFieldList.js";
 import parseContactFitlerParams from "../utils/parseContactFilterParams.js";
+import uploadImage from "../utils/configureCloudinary.js";
 
 
 export const getContactsController = async (req,res) =>{
@@ -56,8 +57,12 @@ export const getContactsByIdController = async (req,res,next)=>{
 }};
 
 export const postContactController = async (req,res) => {
+    let photo = "";
+    if(req.file){
+        photo = await uploadImage(req.file.path);
+    }
     req.body.userId = req.user._id;
-    const data = await postContact(req.body);
+    const data = await postContact({...req.body,photo});
 
     res.status(201).json({
         status:201,
@@ -80,10 +85,15 @@ export const deleteContactController = async (req,res,next) => {
 };
 
 export const upsetContactController = async (req, res, next) => {
+
     const {id} = req.params;
     const { _id: userId } = req.user;
     const body = req.body;
-    const data = await upsetContact({_id:id,userId},body);
+    let photo = "";
+    if(req.file){
+        photo = await uploadImage(req.file.path);
+    }
+    const data = await upsetContact({_id:id,userId},{...body,photo});
 
     if(!data){throw next(createHttpError(404,"Contact not found"));};
 
