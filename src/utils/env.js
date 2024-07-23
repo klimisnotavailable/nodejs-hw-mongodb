@@ -7,7 +7,7 @@ const env = (name, defaultValue)=>{
 
     if(defaultValue) return defaultValue;
 
-    throw new Error (`missing ${process.env[name]}`);
+    throw new Error(`missing ${process.env[name]}`);
 };
 
 export default env;
