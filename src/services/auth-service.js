@@ -124,7 +124,7 @@ export const requestResetToken = async (email) => {
     html:emailHTML
   };
 
-  await sendMail(verifyEmail);
+  return await sendMail(verifyEmail);
 };
 
 export const resetPassword = async (payload) => {
