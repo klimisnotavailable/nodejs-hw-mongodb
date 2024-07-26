@@ -382,9 +382,9 @@
         "tags": [
           "Contacts"
         ],
-        "summary": "Patch contact",
+        "summary": "Delete contact",
         "operationId": "deleteContact",
-        "description": "Patch contact by id",
+        "description": "Delete contact by id",
         "security": [
           {
             "bearerAuth": []
