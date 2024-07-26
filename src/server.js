@@ -3,7 +3,8 @@ import pino from "pino-http";
 import cors from "cors";
 import env from "./utils/env.js";
 import cookieParser from 'cookie-parser';
-import { TEMP_UPLOAD_DIR } from './constants/index.js';
+ import {swaggerDocs} from "./middlewares/swaggerDocs.js";
+import { UPLOAD_DIR } from './constants/index.js';
 
 const app = express();
 
@@ -22,10 +23,12 @@ export const setUpServer = () =>{
     //       },
     //     }),
     // );
-    console.log(TEMP_UPLOAD_DIR);
     app.use(cookieParser());
     app.use(cors());
     app.use(express.json());
+    app.use(express.static(UPLOAD_DIR));
+    app.use('/api-docs', swaggerDocs());
+
 
     app.use("/contacts", contactsRouter);
     app.use("/auth", authRouter);

@@ -2,6 +2,7 @@ import createHttpError from 'http-errors';
 import {findUser, loginUser, registerUser,  logoutUser, refreshSession, requestResetToken,resetPassword} from '../services/auth-service.js';
 import { setupSession } from '../utils/setUpSession.js';
 import { ONE_DAY } from '../constants/index.js';
+import { generateAuthURL } from '../utils/googleOAuthClient2.js';
 
 
 export const registerUserController = async (req, res) => {
@@ -81,5 +82,16 @@ export const resetPasswordController = async (req,res) => {
     message: 'Password was successfully reset!',
     status: 200,
     data: {},
+  });
+};
+
+export const googleOAuthController = async (req,res) => {
+  const url = generateAuthURL();
+  res.status(200).json({
+    status: 200,
+    message: 'Successfully get Google OAuth url!',
+    data: {
+      url,
+    },
   });
 };

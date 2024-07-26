@@ -19,11 +19,11 @@ export const getAllContacts = async (page,perPage,sortBy = "_id",sortOrder="asc"
     const hasPrevPage = page !== 1;
 
     return {
+        data:items,
         page,
         perPage,
         totalItems,
         totalPages,
-        data:items,
         hasNextPage,
         hasPrevPage
     };

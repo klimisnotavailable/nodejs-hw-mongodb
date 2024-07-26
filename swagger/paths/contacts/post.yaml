@@ -1,0 +1,67 @@
+tags:
+  - Contacts
+summary:  Add contact
+operationId: postContact
+description: 'Add contact by id'
+security:
+  - bearerAuth: []
+requestBody:
+  content:
+    multipart/from-data:
+      schema:
+        type: object
+        required:
+          - name
+          - phoneNumber
+        properties:
+          name:
+            description: Contact name
+            type: string
+            example: John Doe
+          phoneNumber:
+            description: Contact`s phone number
+            type: string
+            example: +3809634558762
+          email:
+            description: Contact`s email
+            type: string
+            example: johndoe123@example.com
+          isFavourite:
+            description: Is a favourite
+            type: boolean
+            example: true
+            default: false
+          contactType:
+            description: Personal or work
+            type: string
+            enum: ["personal","work"]
+          photo:
+            description: Contact`s photo
+            type: string
+            example: https://res.cloudinary.com/dgzeqqa8h/image/upload/v1721799310/1721799309977_beautiful-asian-girl-wearing-over-size-hoodie-in-casual-style-ai-generative-photo_f9qajs.jpg
+responses:
+  '200':
+    description: 'Add contact'
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - status
+            - message
+            - data
+          properties:
+            status:
+              type: integer
+              example: 200
+            message:
+              type: string
+              example: Sucsessfuly create a contact
+            data:
+              type: object
+              $ref: ../../components/schemas/contact.yaml
+  '401':
+    $ref: '../../components/responses/401.yaml'
+  '404':
+    $ref: "../../components/responses/404.yaml"
+
