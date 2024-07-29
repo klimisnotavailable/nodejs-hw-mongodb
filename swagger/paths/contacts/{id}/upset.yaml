@@ -13,6 +13,41 @@ parameters:
     schema:
       type: string
       example: '65ca67e7ae7f10c88b598384'
+requestBody:
+  content:
+    multipart/from-data:
+      schema:
+        type: object
+        required:
+          - name
+          - phoneNumber
+        properties:
+          name:
+            description: Contact name
+            type: string
+            example: John Doe
+          phoneNumber:
+            description: Contact`s phone number
+            type: string
+            example: +3809634558762
+          email:
+            description: Contact`s email
+            type: string
+            example: johndoe123@example.com
+          isFavourite:
+            description: Is a favourite
+            type: boolean
+            example: true
+            default: false
+          contactType:
+            description: Personal or work
+            type: string
+            enum: ["personal","work"]
+          photo:
+            description: Contact`s photo
+            type: string
+            format: binary
+            example: https://res.cloudinary.com/dgzeqqa8h/image/upload/v1721799310/1721799309977_beautiful-asian-girl-wearing-over-size-hoodie-in-casual-style-ai-generative-photo_f9qajs.jpg
 responses:
   '200':
     description: 'Update contact by id'

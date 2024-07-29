@@ -38,6 +38,7 @@ requestBody:
           photo:
             description: Contact`s photo
             type: string
+            format: binary
             example: https://res.cloudinary.com/dgzeqqa8h/image/upload/v1721799310/1721799309977_beautiful-asian-girl-wearing-over-size-hoodie-in-casual-style-ai-generative-photo_f9qajs.jpg
 responses:
   '200':
